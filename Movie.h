@@ -8,26 +8,30 @@ using namespace std;
 class Movie {
 private:
 protected:
+public:
 	string title;
 	int year, runningTime;
 	string colorBW;
-public:
+	Movie *lhsn, *rhsn;
 	Movie(string t = "No Title", int y = 1, int rt = 0, string c = "Color") {
-		title = t; year = y; runningTime = rt; colorBW = c;
+		title = t; year = y; runningTime = rt; colorBW = c; lhsn = NULL; rhsn = NULL;
 	}
 	/*
 	*  A destructor.  Not really necessary but I like to set fields so that
 	*  a deleted object is at least noticed if it is referenced.
 	*/
 	~Movie() {
-		title = "No Title"; colorBW = "No Value"; year = 0; runningTime = 0;
+		title = "No Title"; colorBW = "No Value"; year = 0; runningTime = 0; lhsn = NULL; rhsn = NULL;
 	}
 	/*
 	* Access methods for fields.
 	*/
 	string getTitle() { return title; }
 	int getYear() { return year; }
+	Movie newMovieInfo();
 	int getRunningTime() { return runningTime; }
+	Movie getlhs() { return *lhsn; }
+	Movie getrhs() { return *rhsn; }
 	string getColorBW() { return colorBW; }
 	bool isColor() { return colorBW == "Color"; }
 	bool isBlackAndWhite() { return !isColor(); }

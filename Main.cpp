@@ -106,6 +106,11 @@ void testIOoperators(vector<Movie> startList) {
 * A main program to test the routines in our Movies class.
 */
 int main(int argCount, char *argValues[]) {
+	Movie method;
+	Movie m1("Moby Dick", 1938, 110, "BW"), m2("Moby Dick", 1998, 98, "Color"),
+		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Moby Dick", 1998, 110, "BW"), mNum;
+	vector<Movie> list = { m1, m2, m3, m4, m5 };
+	
 	//the following is mine
 	string inComm = "";
 	int invalCommNum = 0;
@@ -116,6 +121,34 @@ int main(int argCount, char *argValues[]) {
 		if (inComm == "f") {//lookup
 
 		}else if (inComm== "a") {//add new movie
+			mNum = method.newMovieInfo();
+			int temp = list.size();
+			temp = (temp / 2)-1;
+			int i = temp, testNum = 0;
+			while (true) {
+				if (list[i].operator<(mNum)) {
+					if (list[i].lhsn==NULL) {
+						for (int i = 0; i < list.size() + 1; i++) {
+							Movie tempName = list[i +1];
+							list[i + 1] = list[i];
+							list[i] = tempName;
+						}
+						list[0] = mNum;
+					}else {
+						i--;
+					}
+				}else if (list[i].operator>(mNum)) {
+					if (list[i].rhsn == NULL) {
+						list.push_back(mNum);
+					}else {
+						i++;
+					}
+				}
+			}
+			
+			cout << temp << " :test" << endl;
+			
+			cout << temp << " :test" << endl;
 
 		}else if (inComm == "d") {//delete movie
 
@@ -141,13 +174,6 @@ int main(int argCount, char *argValues[]) {
 			}
 		}
 	}
-
-	Movie m1("Moby Dick", 1938, 110, "BW"), m2("Moby Dick", 1998, 98, "Color"),
-		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Moby Dick", 1998, 110, "BW");
-
-		//for(int i = 6; i < 12; i++) {
-		//	Movie m("test", 1956, 111, "BW");
-		//}
 	
 	test(m1, m2);
 	test(m1, m3);
@@ -157,14 +183,42 @@ int main(int argCount, char *argValues[]) {
 	test(m3, m5);
 	
 
-	vector<Movie> list = { m1, m2, m3, m4, m5 };
-	//list.push_back(m6);
+	
 	cout << "__________________" << endl;
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 3; i++) {
 		cout << list[i] << endl;
 	}
-	
+	//end of my stuff
 
-	//testIOoperators(list);
+	//testIOoperators(list); i comment this out to get tree stuff up 
 	return EXIT_SUCCESS;
+}
+
+
+Movie Movie::newMovieInfo() {
+	string tempName = "", tempcolor ="";
+	int tempyr=0, tempRuntime=0;
+
+	cout << "Enter name of movie: ";
+	cin >> tempName;
+	cout << "Enter year of movie: ";
+	cin >> tempyr;
+	cout << "Enter runTime of movie: ";
+	cin >> tempRuntime;
+	cout << "Enter Color or BW of movie: ";
+	cin >> tempcolor;
+	Movie mtemp(tempName, tempyr, tempRuntime, tempcolor);
+	return mtemp;
+}
+int testMine(Movie lhs, Movie rhs) {
+
+	if (lhs < rhs) {
+		return 0;
+	}
+	if (lhs == rhs) {
+		return 1;
+	}
+	if (lhs > rhs) {
+		return 2;
+	}
 }
