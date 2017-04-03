@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 using namespace std;
 
 class Movie {
@@ -65,6 +66,11 @@ public:
 
 	friend istream& operator >> (istream& ins, Movie &m);
 };
+struct myclass {
+	bool operator() (Movie i, Movie j) {
+		return (i<j);
+	}
+} myobject;
 /*
 *  output operator for the Movie class.  Outputs
 *  the values one per line as stated in class.

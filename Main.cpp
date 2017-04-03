@@ -4,6 +4,7 @@
 #include <string>
 #include "Movie.h"
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 /*
@@ -46,6 +47,96 @@ void test(Movie lhs, Movie rhs) {
 		cout << lhs << " is greater than " << rhs << endl;
 	}
 }
+void findPos(vector<Movie>& list) {
+
+	string keyTitle = "";
+	vector<Movie> listTemp;
+	vector<Movie> listTempUlrta;
+	vector<int> listSpot;
+	int yr = 0;
+
+	cin.ignore();
+	cout << "Title> " ;
+	getline(cin, keyTitle);
+	cout << "Year> ";
+	cin >> yr;
+	
+	int j = 0, halfCut = 0;
+	bool isFound = false;
+	halfCut = ((list.size() / 2));
+	listTemp = list;
+	while (j <= list.size() - 1) {
+		cout << ":" << listTemp[halfCut].title<< "-"<< listTemp[halfCut].year << endl;
+		if (listTemp[halfCut].title<keyTitle) {
+			cout << "tes!";
+			listTempUlrta = listTemp;
+			listTemp.clear();
+			for (int i = halfCut; i < listTempUlrta.size() ; i++) {
+				listTemp.push_back(listTempUlrta[i]);
+			}
+			halfCut = ((listTemp.size() / 2));
+			if (list[list.size() - 1].title == keyTitle) {
+				cout<< list[list.size()-1]<<endl;
+				isFound = true;
+				break;
+			}
+		}else if (listTemp[halfCut].title>keyTitle) {
+			listTempUlrta = listTemp;
+			
+			listTemp.clear();
+			for (int i = 0; i < halfCut; i++) {
+				listTemp.push_back(listTempUlrta[i]);
+			}
+			halfCut = ((listTemp.size() / 2));
+		}else if (listTemp[halfCut].title == keyTitle) { //if title are same
+			if (listTemp[halfCut].year<yr) {
+				cout << "found3" << listTemp.size() << endl;
+				cout << halfCut << endl;
+				listTempUlrta = listTemp;
+				listTemp.clear();
+				for (int i = halfCut; i < listTempUlrta.size()-1; i++) {
+					listTemp.push_back(listTempUlrta[i]);
+					cout << listTemp[i];
+				}
+				halfCut = ((listTemp.size() / 2));
+				if (list[list.size() - 1].title == keyTitle) {
+					cout << list[list.size() - 1] << endl;
+					isFound = true;
+					break;
+				}
+			}else if (listTemp[halfCut].year>yr) {
+				cout << "found2" << endl;
+				for (int i = 0; i < listTemp.size() - 1; i++) {
+					cout << "!:!" << listTemp[i] << endl;
+				}
+				listTempUlrta = listTemp;
+				listTemp.clear();
+				for (int i = 0; i < halfCut; i++) {
+					listTemp.push_back(listTempUlrta[i]);
+				}
+				halfCut = ((listTemp.size() / 2));
+			}else {
+				cout << "found" << endl;
+				cout << list[halfCut] << endl;
+				isFound = true;
+				break;
+			}
+			
+			cout << "_____" << endl;
+			if (halfCut == 0 || halfCut == list.size()) {
+				//break;
+			}
+		}else if (listTemp.size()==1){
+			cout << "test!";
+		}
+		j++;
+	}
+	if (isFound == false) {
+		cout << "Not Found!" << endl;
+	}
+
+}
+
 
 /*
 * testIOoperators tests whether the input and output operators
@@ -108,68 +199,35 @@ void testIOoperators(vector<Movie> startList) {
 int main(int argCount, char *argValues[]) {
 	Movie method;
 	Movie m1("Moby Dick", 1938, 110, "BW"), m2("Moby Dick", 1998, 98, "Color"),
-		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Moby Dick1", 1998, 110, "BW"), mNum;
-	vector<Movie> list = { m4, m1, m2, m5,m3 };
+		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Test", 1998, 110, "BW"), m6("Moby Dick", 1969, 52,"Color"),mNum;
+	vector<Movie> list = { m1, m4,m6, m2, m3, m5 };
 	
 	//the following is mine
 	string inComm = "";
 	int invalCommNum = 0;
 	cout << "If you need help tpye 'Help' into the command." << endl;
+	std::sort(list.begin(), list.end(), myobject);
 	while (inComm != "Exit") {
 		cout << "Enter command:";
 		cin >> inComm;
 		if (inComm == "f") {//lookup
-			string keyTitle = "";
-			vector<Movie> listTemp;
-			vector<Movie> listTempFound;
-			int yr = 0;
-
-			cin.ignore();
-			cout << "Title> " ;
-			getline(cin, keyTitle);
-			cout << "Year> ";
-			cin >> yr;
-
-			int j = 0, halfCut = 0;
-			halfCut = ((list.size() / 2));
-			listTemp = list;
-			while (j<=list.size()-1) {
-				if (listTemp[halfCut].title<keyTitle) {
-					listTemp.clear();
-					for (int i = halfCut; i < list.size(); i++) {
-						listTemp.push_back(list[i]);
-					}
-					halfCut = ((listTemp.size() / 2) );
-				}else if (listTemp[halfCut].title>keyTitle) {
-					listTemp.clear();
-					for (int i = 0; i < halfCut; i++) {
-						listTemp.push_back(list[i]);
-					}
-					halfCut = ((listTemp.size() / 2) );
-				}else if(listTemp[halfCut].title==keyTitle){
-					listTempFound.push_back(list[halfCut]);
-					listTemp.erase(listTemp.begin()+(halfCut));
-					cout << "reached here1"<<endl;
-					if (halfCut == 0 || halfCut == list.size()) {
-						break;
-					}
-					halfCut = ((list.size() / 2));
-					cout << "reached here2"<<endl;
-				}else if(halfCut ==0 || halfCut == list.size()){
-					break;
-					cout << "done<" << endl;
-				}
-				cout << ":-" << list.size()<< "-:j-"<<j<< endl;
-				j++;
-			}
+			findPos(list);
 		}else if (inComm== "a") {//add new movie
 			mNum = method.newMovieInfo();
 			list.push_back(mNum);
+			std::sort(list.begin(), list.end(), myobject);
 		}else if (inComm == "d") {//delete movie
 
-		}else if (inComm == "p") {//list all the movies
 
-		}else if (inComm == "h" || inComm =="?") {//prints out help msg
+			std::sort(list.begin(), list.end(), myobject);
+		}else if (inComm == "p") {//list all the movies
+			std::sort(list.begin(), list.end(), myobject);
+			for (int i = 0; i < list.size(); i++){
+				cout << list[i] << endl;
+			}
+			cout << "-----------"<< endl;
+		}
+		else if (inComm == "h" || inComm == "?") {//prints out help msg
 			cout << "List of commands:" << endl;
 			cout << "'f' -- use to find a movie, search by title." << endl;
 			cout << "'a' -- use to add a movie." << endl;
@@ -190,20 +248,12 @@ int main(int argCount, char *argValues[]) {
 		}
 	}
 	
-	test(m1, m2);
-	test(m1, m3);
-	test(m1, m4);
-	test(m1, m5);
-	test(m2, m5);
-	test(m3, m5);
-	
-
-	
-	cout << "__________________" << endl;
-	for (int i = 0; i < list.size(); i++) {
-		cout << list[i] << endl;
-	}
-	//end of my stuff
+	//test(m1, m2);
+	//test(m1, m3);
+	//test(m1, m4);
+	//test(m1, m5);
+	//test(m2, m5);
+	//test(m3, m5);
 
 	//testIOoperators(list); i comment this out to get tree stuff up 
 	return EXIT_SUCCESS;
@@ -225,3 +275,6 @@ Movie Movie::newMovieInfo() {
 	Movie mtemp(tempName, tempyr, tempRuntime, tempcolor);
 	return mtemp;
 }
+
+
+
