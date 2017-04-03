@@ -108,8 +108,8 @@ void testIOoperators(vector<Movie> startList) {
 int main(int argCount, char *argValues[]) {
 	Movie method;
 	Movie m1("Moby Dick", 1938, 110, "BW"), m2("Moby Dick", 1998, 98, "Color"),
-		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Moby Dick", 1998, 110, "BW"), mNum;
-	vector<Movie> list = { m1, m2, m3, m4, m5 };
+		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Moby Dick1", 1998, 110, "BW"), mNum;
+	vector<Movie> list = { m4, m1, m2, m5,m3 };
 	
 	//the following is mine
 	string inComm = "";
@@ -119,37 +119,52 @@ int main(int argCount, char *argValues[]) {
 		cout << "Enter command:";
 		cin >> inComm;
 		if (inComm == "f") {//lookup
+			string keyTitle = "";
+			vector<Movie> listTemp;
+			vector<Movie> listTempFound;
+			int yr = 0;
 
+			cin.ignore();
+			cout << "Title> " ;
+			getline(cin, keyTitle);
+			cout << "Year> ";
+			cin >> yr;
+
+			int j = 0, halfCut = 0;
+			halfCut = ((list.size() / 2));
+			listTemp = list;
+			while (j<=list.size()-1) {
+				if (listTemp[halfCut].title<keyTitle) {
+					listTemp.clear();
+					for (int i = halfCut; i < list.size(); i++) {
+						listTemp.push_back(list[i]);
+					}
+					halfCut = ((listTemp.size() / 2) );
+				}else if (listTemp[halfCut].title>keyTitle) {
+					listTemp.clear();
+					for (int i = 0; i < halfCut; i++) {
+						listTemp.push_back(list[i]);
+					}
+					halfCut = ((listTemp.size() / 2) );
+				}else if(listTemp[halfCut].title==keyTitle){
+					listTempFound.push_back(list[halfCut]);
+					listTemp.erase(listTemp.begin()+(halfCut));
+					cout << "reached here1"<<endl;
+					if (halfCut == 0 || halfCut == list.size()) {
+						break;
+					}
+					halfCut = ((list.size() / 2));
+					cout << "reached here2"<<endl;
+				}else if(halfCut ==0 || halfCut == list.size()){
+					break;
+					cout << "done<" << endl;
+				}
+				cout << ":-" << list.size()<< "-:j-"<<j<< endl;
+				j++;
+			}
 		}else if (inComm== "a") {//add new movie
 			mNum = method.newMovieInfo();
-			int temp = list.size();
-			temp = (temp / 2)-1;
-			int i = temp, testNum = 0;
-			while (true) {
-				if (list[i].operator<(mNum)) {
-					if (list[i].lhsn==NULL) {
-						for (int i = 0; i < list.size() + 1; i++) {
-							Movie tempName = list[i +1];
-							list[i + 1] = list[i];
-							list[i] = tempName;
-						}
-						list[0] = mNum;
-					}else {
-						i--;
-					}
-				}else if (list[i].operator>(mNum)) {
-					if (list[i].rhsn == NULL) {
-						list.push_back(mNum);
-					}else {
-						i++;
-					}
-				}
-			}
-			
-			cout << temp << " :test" << endl;
-			
-			cout << temp << " :test" << endl;
-
+			list.push_back(mNum);
 		}else if (inComm == "d") {//delete movie
 
 		}else if (inComm == "p") {//list all the movies
@@ -185,7 +200,7 @@ int main(int argCount, char *argValues[]) {
 
 	
 	cout << "__________________" << endl;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < list.size(); i++) {
 		cout << list[i] << endl;
 	}
 	//end of my stuff
@@ -200,25 +215,13 @@ Movie Movie::newMovieInfo() {
 	int tempyr=0, tempRuntime=0;
 
 	cout << "Enter name of movie: ";
-	cin >> tempName;
+	getline(cin,tempName);
 	cout << "Enter year of movie: ";
 	cin >> tempyr;
 	cout << "Enter runTime of movie: ";
 	cin >> tempRuntime;
 	cout << "Enter Color or BW of movie: ";
-	cin >> tempcolor;
+	getline(cin,tempcolor);
 	Movie mtemp(tempName, tempyr, tempRuntime, tempcolor);
 	return mtemp;
-}
-int testMine(Movie lhs, Movie rhs) {
-
-	if (lhs < rhs) {
-		return 0;
-	}
-	if (lhs == rhs) {
-		return 1;
-	}
-	if (lhs > rhs) {
-		return 2;
-	}
 }
