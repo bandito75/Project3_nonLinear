@@ -111,7 +111,7 @@ void testIOoperators(vector<Movie> startList) {
 	* output all the movies in the vector startList to the
 	* outmovies.txt file.
 	*/
-	outfile.open("outmovies1.txt");
+	outfile.open("outmovies.txt");
 	if (outfile.is_open()) {
 		for (auto i : startList) {
 			outfile << i;
@@ -123,7 +123,7 @@ void testIOoperators(vector<Movie> startList) {
 	*  Open the file for input and try to read in the
 	* movies that were written out.
 	*/
-	infile.open("outmovies1.txt");
+	infile.open("outmovies.txt");
 	if (infile.is_open()) {
 		while (!infile.bad() && !infile.eof()) {
 			Movie m;
@@ -157,11 +157,25 @@ void testIOoperators(vector<Movie> startList) {
 */
 int main(int argCount, char *argValues[]) {
 	Movie method;
-	Movie m1("Moby Dick", 1938, 110, "BW"), m2("Moby Dick", 1998, 98, "Color"),
-		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Test", 1998, 110, "BW"), m6("Moby Dick", 1969, 52, "Color"), mNum;
-	vector<Movie> list = { m1, m4,m6, m2, m3, m5 };
+	ifstream infile;
+	vector<Movie> list;
+	infile.open("outmovies.txt");
+	if (infile.is_open()) {
+		while (!infile.bad() && !infile.eof()) {
+			Movie m;
+			infile >> m;
+			if (infile.good() && !infile.eof()) {
+				list.push_back(m);
+			}
+		}
+		infile.close();
+	}
+	//Movie m1("Moby Dick", 1938, 110, "BW"), m2("Moby Dick", 1998, 98, "Color"),
+		//m3, m4("Kill Bill", 1998, 99, "Color"), m5("Test", 1998, 110, "BW"), m6("Moby Dick", 1969, 52, "Color"), mNum;
+		//vector<Movie> list = { m1, m4,m6, m2, m3, m5 };
 
-	//the following is mine
+
+
 	string inComm = "";
 	int invalCommNum = 0;
 	cout << "If you need help tpye 'Help' into the command." << endl;
@@ -180,8 +194,9 @@ int main(int argCount, char *argValues[]) {
 			}
 		}
 		else if (inComm == "a") {//add new movie
-			mNum = method.newMovieInfo();
-			list.push_back(mNum);
+			Movie m;
+			m = method.newMovieInfo();
+			list.push_back(m);
 			std::sort(list.begin(), list.end(), myobject);
 		}
 		else if (inComm == "d") {//delete movie
@@ -242,7 +257,7 @@ int main(int argCount, char *argValues[]) {
 	//test(m2, m5);
 	//test(m3, m5);
 
-	testIOoperators(list); //i comment this out to get tree stuff up 
+	testIOoperators(list);
 	return EXIT_SUCCESS;
 }
 
