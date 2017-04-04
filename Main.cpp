@@ -7,29 +7,10 @@
 #include <algorithm>
 using namespace std;
 
-/*
-* Test program for the movie class.
-*
-* This main program is designed to test the input and output routines as well as access methods
-* for the movie class that we started in class.  I have added code to create a vector of
-* movies and write it out (followed by reading it in) using the overloaded operators.
-*
-* Author:  Jerry Heuring
-* Date:  March 21, 2017
-*
-* Bugs:
-*
-* Revisions:
-*   Added test code to check input and output operators with a file.
-*   The file written is outmovies.txt.
-*
-*
+/* Project 3 Binary tree Movie
+*   By: Michael Revilla
 */
 
-/*
-* Test simply tests two movies for <. > or =.  It is being used to test
-* the operators defined in the Movie class.
-*/
 void test(Movie lhs, Movie rhs) {
 	//my stuff
 	//string tempL = lhs.getTitle();
@@ -47,7 +28,7 @@ void test(Movie lhs, Movie rhs) {
 		cout << lhs << " is greater than " << rhs << endl;
 	}
 }
-void findPos(vector<Movie>& list) {
+int findPos(vector<Movie>& list) {
 
 	string keyTitle = "";
 	vector<Movie> listTemp;
@@ -56,85 +37,63 @@ void findPos(vector<Movie>& list) {
 	int yr = 0;
 
 	cin.ignore();
-	cout << "Title> " ;
+	cout << "Title> ";
 	getline(cin, keyTitle);
 	cout << "Year> ";
 	cin >> yr;
-	
+
 	int j = 0, halfCut = 0;
 	bool isFound = false;
 	halfCut = ((list.size() / 2));
 	listTemp = list;
 	while (j <= list.size() - 1) {
-		cout << ":" << listTemp[halfCut].title<< "-"<< listTemp[halfCut].year << endl;
 		if (listTemp[halfCut].title<keyTitle) {
-			cout << "tes!";
 			listTempUlrta = listTemp;
 			listTemp.clear();
-			for (int i = halfCut; i < listTempUlrta.size() ; i++) {
+			for (int i = halfCut; i < listTempUlrta.size(); i++) {
 				listTemp.push_back(listTempUlrta[i]);
 			}
 			halfCut = ((listTemp.size() / 2));
-			if (list[list.size() - 1].title == keyTitle) {
-				cout<< list[list.size()-1]<<endl;
-				isFound = true;
-				break;
-			}
-		}else if (listTemp[halfCut].title>keyTitle) {
+		}
+		else if (listTemp[halfCut].title>keyTitle) {
 			listTempUlrta = listTemp;
-			
+
 			listTemp.clear();
 			for (int i = 0; i < halfCut; i++) {
 				listTemp.push_back(listTempUlrta[i]);
 			}
 			halfCut = ((listTemp.size() / 2));
-		}else if (listTemp[halfCut].title == keyTitle) { //if title are same
+		}
+		else if (listTemp[halfCut].title == keyTitle) { //if title are same
 			if (listTemp[halfCut].year<yr) {
-				cout << "found3" << listTemp.size() << endl;
-				cout << halfCut << endl;
 				listTempUlrta = listTemp;
 				listTemp.clear();
-				for (int i = halfCut; i < listTempUlrta.size()-1; i++) {
+				for (int i = halfCut; i < listTempUlrta.size(); i++) {
 					listTemp.push_back(listTempUlrta[i]);
-					cout << listTemp[i];
 				}
 				halfCut = ((listTemp.size() / 2));
-				if (list[list.size() - 1].title == keyTitle) {
-					cout << list[list.size() - 1] << endl;
-					isFound = true;
-					break;
-				}
-			}else if (listTemp[halfCut].year>yr) {
-				cout << "found2" << endl;
-				for (int i = 0; i < listTemp.size() - 1; i++) {
-					cout << "!:!" << listTemp[i] << endl;
-				}
+			}
+			else if (listTemp[halfCut].year>yr) {
 				listTempUlrta = listTemp;
 				listTemp.clear();
 				for (int i = 0; i < halfCut; i++) {
 					listTemp.push_back(listTempUlrta[i]);
 				}
 				halfCut = ((listTemp.size() / 2));
-			}else {
-				cout << "found" << endl;
-				cout << list[halfCut] << endl;
+			}
+			else {
+				int MyTemp = 0;
+				MyTemp = find(list.begin(), list.end(), listTemp[halfCut]) - list.begin();
+				return MyTemp;
 				isFound = true;
 				break;
 			}
-			
-			cout << "_____" << endl;
-			if (halfCut == 0 || halfCut == list.size()) {
-				//break;
-			}
-		}else if (listTemp.size()==1){
-			cout << "test!";
 		}
 		j++;
 	}
 	if (isFound == false) {
-		cout << "Not Found!" << endl;
+		return -1;
 	}
-
 }
 
 
@@ -199,9 +158,9 @@ void testIOoperators(vector<Movie> startList) {
 int main(int argCount, char *argValues[]) {
 	Movie method;
 	Movie m1("Moby Dick", 1938, 110, "BW"), m2("Moby Dick", 1998, 98, "Color"),
-		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Test", 1998, 110, "BW"), m6("Moby Dick", 1969, 52,"Color"),mNum;
+		m3, m4("Kill Bill", 1998, 99, "Color"), m5("Test", 1998, 110, "BW"), m6("Moby Dick", 1969, 52, "Color"), mNum;
 	vector<Movie> list = { m1, m4,m6, m2, m3, m5 };
-	
+
 	//the following is mine
 	string inComm = "";
 	int invalCommNum = 0;
@@ -211,21 +170,56 @@ int main(int argCount, char *argValues[]) {
 		cout << "Enter command:";
 		cin >> inComm;
 		if (inComm == "f") {//lookup
-			findPos(list);
-		}else if (inComm== "a") {//add new movie
+			int X = 0;
+			X = findPos(list);
+			if (X == -1) {
+				cout << "Not Found!" << endl;
+			}
+			else {
+				cout << list[X] << endl;
+			}
+		}
+		else if (inComm == "a") {//add new movie
 			mNum = method.newMovieInfo();
 			list.push_back(mNum);
 			std::sort(list.begin(), list.end(), myobject);
-		}else if (inComm == "d") {//delete movie
+		}
+		else if (inComm == "d") {//delete movie
+			int X = 0;
+			X = findPos(list);
+			if (X == -1) {
+				cout << "Not Found!" << endl;
+			}
+			else {
+				string checkDel = "";
+				cout << "Are you sure you want to delete " << list[X] << endl << "from the database? ('Y' or 'N') Yes and No respectfully!" << endl;
+				cin >> checkDel;
+				if (checkDel == "Y") {
+					int MyTemp = 0;
+					MyTemp = find(list.begin(), list.end(), list[X]) - list.begin();
+					for (int i = 0; i < list.size(); i++) {
+						cout << list[i] << endl;
+					}
+					cout << "-------------" << X << endl;
+					list.erase(list.begin() + (MyTemp));
+					for (int i = 0; i < list.size(); i++) {
+						cout << list[i] << endl;
+					}
+				}
+				else {
+					cout << list[X].title << " will not be delete from the databse!" << endl;
+				}
 
+			}
 
 			std::sort(list.begin(), list.end(), myobject);
-		}else if (inComm == "p") {//list all the movies
+		}
+		else if (inComm == "p") {//list all the movies
 			std::sort(list.begin(), list.end(), myobject);
-			for (int i = 0; i < list.size(); i++){
+			for (int i = 0; i < list.size(); i++) {
 				cout << list[i] << endl;
 			}
-			cout << "-----------"<< endl;
+			cout << "-----------" << endl;
 		}
 		else if (inComm == "h" || inComm == "?") {//prints out help msg
 			cout << "List of commands:" << endl;
@@ -234,10 +228,12 @@ int main(int argCount, char *argValues[]) {
 			cout << "'d' -- use to delete a movie." << endl;
 			cout << "'p' -- use to list out all the movies in order." << endl;
 			cout << "'Exit' -- use to exit program." << endl;
-		}else {// this is for anything else no vaild commands or Exit
+		}
+		else {// this is for anything else no vaild commands or Exit
 			if (inComm == "Exit") {
 				//do ending stuff 
-			}else {
+			}
+			else {
 				cout << inComm + " is a invaild commnand, please try again!" << endl;
 				invalCommNum++;
 				if (invalCommNum >= 10) {
@@ -247,7 +243,7 @@ int main(int argCount, char *argValues[]) {
 			}
 		}
 	}
-	
+
 	//test(m1, m2);
 	//test(m1, m3);
 	//test(m1, m4);
@@ -255,26 +251,25 @@ int main(int argCount, char *argValues[]) {
 	//test(m2, m5);
 	//test(m3, m5);
 
-	//testIOoperators(list); i comment this out to get tree stuff up 
+	testIOoperators(list); //i comment this out to get tree stuff up 
 	return EXIT_SUCCESS;
 }
 
 
 Movie Movie::newMovieInfo() {
-	string tempName = "", tempcolor ="";
-	int tempyr=0, tempRuntime=0;
+	string tempName = "", tempcolor = "";
+	int tempyr = 0, tempRuntime = 0;
 
+	cin.ignore();
 	cout << "Enter name of movie: ";
-	getline(cin,tempName);
+	getline(cin, tempName);
 	cout << "Enter year of movie: ";
 	cin >> tempyr;
 	cout << "Enter runTime of movie: ";
 	cin >> tempRuntime;
+	cin.ignore();
 	cout << "Enter Color or BW of movie: ";
-	getline(cin,tempcolor);
+	getline(cin, tempcolor);
 	Movie mtemp(tempName, tempyr, tempRuntime, tempcolor);
 	return mtemp;
 }
-
-
-
