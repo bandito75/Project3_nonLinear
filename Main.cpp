@@ -197,21 +197,12 @@ int main(int argCount, char *argValues[]) {
 				if (checkDel == "Y") {
 					int MyTemp = 0;
 					MyTemp = find(list.begin(), list.end(), list[X]) - list.begin();
-					for (int i = 0; i < list.size(); i++) {
-						cout << list[i] << endl;
-					}
-					cout << "-------------" << X << endl;
 					list.erase(list.begin() + (MyTemp));
-					for (int i = 0; i < list.size(); i++) {
-						cout << list[i] << endl;
-					}
 				}
 				else {
 					cout << list[X].title << " will not be delete from the databse!" << endl;
 				}
-
 			}
-
 			std::sort(list.begin(), list.end(), myobject);
 		}
 		else if (inComm == "p") {//list all the movies
